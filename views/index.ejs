@@ -1,0 +1,42 @@
+<%- include("partials/header.ejs") %>
+
+ 
+<div class = "container">
+    <% if(locals.header){ %>
+        <div class = " d-flex justify-content-center align-items-center mt-3">
+            <div class = header-box>
+                <h1><%= header %></h1>
+            </div>
+        </div>
+
+    <%}else{ %>
+        <div class = "d-flex justify-content-center align-items-center mt-3">
+            <div class = header-box>
+                <h1>Work List</h1>
+            </div>
+        </div>        
+    <%}%>
+
+    
+
+    <div class = "d-flex flex-column justify-content-center align-items-center mt-3">
+
+        <form action = <%= action %> method = "post" class = "d-flex flex-shrink-1 gap-1">
+            <input type="text" placeholder = "Add New Task" name = "task" class = "textbox"/>
+            <button class = "button">+</button>
+        </form>
+
+        <div class = "grid-container mt-2">
+            <% if (locals.tasks) { %>
+                <% for(let i = 0 ; i < tasks.length ; i++){ %>
+                        <div class = "task" >
+                            <input type="checkbox" class = "check-box" id = <%= i %>>
+                            <p class = "task-name"> <%= tasks[i] %></p>
+                        </div>
+                <% } %>
+            <% } %>
+        </div>
+    </div>
+</div>
+
+<%- include("partials/footer.ejs") %>
