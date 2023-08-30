@@ -8,3 +8,4 @@ $(".check-box").on("click" , (event) => {
     $(".task-name").eq(event.currentTarget.id.trim()).removeClass("strikethrough");
    }
 })
+

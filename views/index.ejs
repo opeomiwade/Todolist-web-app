@@ -9,14 +9,7 @@
             </div>
         </div>
 
-    <%}else{ %>
-        <div class = "d-flex justify-content-center align-items-center mt-3">
-            <div class = header-box>
-                <h1>Work List</h1>
-            </div>
-        </div>        
     <%}%>
-
     
 
     <div class = "d-flex flex-column justify-content-center align-items-center mt-3">
@@ -29,10 +22,13 @@
         <div class = "grid-container mt-2">
             <% if (locals.tasks) { %>
                 <% for(let i = 0 ; i < tasks.length ; i++){ %>
+                    <form action = "/delete" method = "post">
                         <div class = "task" >
-                            <input type="checkbox" class = "check-box" id = <%= i %>>
-                            <p class = "task-name"> <%= tasks[i] %></p>
+                            <input value = <%=tasks[i]._id%> name = "id" type="checkbox" class = "check-box" id = <%= i %> onChange = "this.form.submit()">
+                            <p class = "task-name"> <%= tasks[i].taskName %></p>
                         </div>
+                    </form>
+                        
                 <% } %>
             <% } %>
         </div>
