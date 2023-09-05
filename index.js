@@ -25,7 +25,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 
 
-await mongoose.connect("mongodb://localhost:27017/todolistDB").catch(error => console.log(error));
+await mongoose.connect("mongodb+srv://ope_admin:test123@cluster0.5zqrscf.mongodb.net/todolistDB").catch(error => console.log(error));
 
 const taskSchema = {
     taskName: {
