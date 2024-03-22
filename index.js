@@ -3,6 +3,7 @@ import bodyParser from "body-parser";
 import mongoose from "mongoose";
 import url from "url"
 import _ from "lodash";
+import "dotenv/config"
 
 const app = express();
 const port = 3000;
@@ -25,7 +26,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 
 
-await mongoose.connect("mongodb+srv://ope_admin:test123@cluster0.5zqrscf.mongodb.net/todolistDB").catch(error => console.log(error));
+await mongoose.connect(`mongodb+srv://ope_admin:${process.env.ATLAS_KEY}@todolist.jgb7nrt.mongodb.net/?retryWrites=true&w=majority&appName=todolist`).catch(error => console.log(error));
 
 const taskSchema = {
     taskName: {
@@ -73,6 +74,7 @@ app.post("/" , async (req ,res) =>{
         })
         await newTask.save().catch(error => console.log(error));
         todayTasks = await task.find();
+        console.log(todayTasks)
         res.redirect("/");
     }
     
@@ -83,7 +85,6 @@ app.post("/delete" , async (req , res) => {
   
     if(source == "/"){
         await task.findByIdAndRemove(req.body.id).catch(error => console.log(error));
-        // todayTasks = await task.find();
         setTimeout(() => {
             res.redirect("/");
         } , 1000);
@@ -94,8 +95,6 @@ app.post("/delete" , async (req , res) => {
     else{
         let name = source.replace(/^\// , '');
         await workTasks.findOneAndUpdate({listName: name} , {$pull: {tasks: {_id: req.body.id}}});
-        const result = await workTasks.findOne({listName: name});
-        // customListTasks = result.tasks;
         setTimeout(() => {
             res.redirect(source);
         } , 1000);
@@ -109,13 +108,13 @@ app.post("/:list" , async (req , res) =>{
 
     else{
         const list = await workTasks.findOne({listName: req.params.list}).exec();
+        console.log(list)
         if(list){
             //list exists
             const newtask = new task({
                 taskName: req.body.task
             })
             list.tasks.push(newtask);
-
             await list.save().catch(error => console.log(error));
             res.redirect("/" + req.params.list); 
 
@@ -128,8 +127,9 @@ app.post("/:list" , async (req , res) =>{
 
             const newList = new workTasks({
                 listName : req.params.list,
-                tasks: newtask
+                tasks: []
             });
+            newList.tasks.push(newtask)
             await newList.save().catch((error) => console.log(error));
             res.redirect("/" + req.params.list); 
         }
